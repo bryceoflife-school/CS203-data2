@@ -5,10 +5,22 @@
  */
 package multiset;
 
+import java.util.Iterator;
+
 /**
  *
  * @author BryceDaniel
  */
-public class Iterator {
+public class Sequence<D> implements Iterator {
+    D here;
+    Sequence<D> next; 
+    
+    public boolean hasNext(){
+        
+    }
+    
+    public Sequence<D> next(){
+        
+    }
     
 }
