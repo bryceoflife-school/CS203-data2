@@ -1,12 +1,8 @@
 package multiset;
 
-public class EmptyBag<D> implements Bag, Sequenced {
+public class EmptyBag<D extends Comparable> implements Bag<D> {
     
     public void EmptyBag(){ }
-    
-    public Sequence<D> seq(){
-        
-    }
     
     public Bag empty(){
         return this;
@@ -20,19 +16,19 @@ public class EmptyBag<D> implements Bag, Sequenced {
         return true;
     }
     
-    public boolean member(int elt){
+    public boolean member(D elt){
         return false;
     }
 
-    public Bag add(int elt){
+    public Bag add(D elt){
         return new NEmptyBag(elt);
     }
 
-    public Bag remove(int elt){
+    public Bag remove(D elt){
         return this;
     }
     
-    public Bag removeAll(int elt){
+    public Bag removeAll(D elt){
         return this;
     }
 

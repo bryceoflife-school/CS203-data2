@@ -11,11 +11,14 @@ package multiset;
  */
 public class MultiSetTests {
 
-    /**
-     * @param args the command line arguments
-     */
+   
     public static void main(String[] args) {
-        // TODO code application logic here
+      Bag empty = new EmptyBag();
+      Bag B1 = new NEmptyBag(9, 2, new NEmptyBag(7, 3, new NEmptyBag(5, 3, empty, empty),empty),
+               new NEmptyBag(11, 1, empty, empty));
+      Bag b2 = new NEmptyBag(10, 3, empty, empty);
+        
+     System.out.println(B1.cardinality());
     }
     
 }
