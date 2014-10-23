@@ -19,6 +19,10 @@ public class EmptyBag<D extends Comparable> implements Bag<D> {
     public boolean member(D elt){
         return false;
     }
+    
+    public int getCount(D elt){
+        return 0;
+    }
 
     public Bag add(D elt){
         return new NEmptyBag(elt);

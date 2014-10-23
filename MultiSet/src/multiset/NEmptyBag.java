@@ -38,11 +38,32 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     }
 
      public boolean member(D elt) {
-        return true;
+        if(this.here.compareTo(elt) == 0) {
+            return true;
+        } else if (this.here.compareTo(elt) > 0) {
+            return left.member(elt);
+        } else {
+            return right.member(elt);
+        }
     }
 
+    public int getCount(D elt){
+        if (this.here.compareTo(elt) == 0){
+            return count;
+        } else if (this.here.compareTo(elt) > 0) {
+            return left.getCount(elt);
+        } else {
+            return right.getCount(elt);
+        }
+    }
     public NEmptyBag add(D elt) {
-        return null;
+        if(this.here.compareTo(elt) == 0) {
+            return this;
+        } else if (this.here.compareTo(elt) > 0) {
+            return new NEmptyBag(this.here, count, this.left.add(elt), this.right);
+        } else {
+            return new NEmptyBag(this.here, count, this.left, this.right.add(elt));
+        }
     }
 
     public Bag remove(D elt) {
