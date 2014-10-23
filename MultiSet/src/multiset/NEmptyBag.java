@@ -1,24 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package multiset;
 
-/**
- *
- * @author BryceDaniel
- */
-public class NEmptyBag implements Bag {
+
+public class NEmptyBag implements Bag, Sequenced {
 
     // Define global variables
-    int here;
+    D here;
     int count; 
     Bag left;
     Bag right;
 
     // Constructor that takes root
-    public NEmptyBag(int here) {
+    public NEmptyBag(D here) {
         this.here = here;
         this.count = 1;
         this.left = empty();
@@ -26,69 +18,49 @@ public class NEmptyBag implements Bag {
     }
 
     // Constructor that takes root, left and right
-    public NEmptyBag(int here, int count, Bag left, Bag right) {
+    public NEmptyBag(D here, int count, Bag left, Bag right) {
         this.here = here;
         this.count = 1;
         this.left = left;
         this.right = right;
     }
 
-    // (empty) → finite-set
-    // Returns a fresh empty set.
     public static NEmptyBag empty() {
         return new EmptyBag();
     }
 
-    // (cardinality t) → integer
-    // t : finite-set
-    // Returns the number of elements in set t
+    public Sequence<D> seq() { 
+        
+    }
+    
     public int cardinality() {
         
     }
 
-    // (isEmptyHuh t) → boolean
-    // t : finite-set
-    // Determines if t is empty
     public boolean isEmptyHuh() {
         return false;
     }
 
-    // (member t elt) → boolean
-    // t : finite-set
-    // elt : integer
-    // Determines if elt is in t
-    public boolean member(int elt) {
+    public boolean member(D elt) {
 
     }
 
-    // (add t elt) → finite-set
-    // t : finite-set
-    // elt : integer
-    // Returns a set containing elt and everything in t
-    public NEmptyBag add(int elt) {
+    public NEmptyBag add(D elt) {
 
     }
 
-    // (remove t elt) → finite-set
-    // t : finite-set
-    // elt : integer
-    // Returns a set containing everything in t except elt.
-    public Bag remove(int elt) {
+    public Bag remove(D elt) {
 
     }
+    
+    public Bag removeAll(D elt) {
+        
+    }
 
-    // (union t u) → finite-set
-    // t : finite-set
-    // u : finite-set
-    // Returns a set containing everything in t and u.
     public Bag union(Bag u) {
        
     }
 
-    // (inter t u) → finite-set
-    // t : finite-set
-    // u : finite-set
-    // Returns a set containing everything that is in both t and u.
     public Bag inter(Bag u) {
         
     }
@@ -101,18 +73,10 @@ public class NEmptyBag implements Bag {
       
     }
 
-    // (equal t u) → boolean
-    // t : finite-set
-    // u : finite-set
-    //Determines if t and u contain the same elements.
     public boolean equal(Bag u) {
     
     }
 
-    //(subset t u) → boolean
-    // t : finite-set
-    // u : finite-set
-    // Determines if t is a subset of u.
     public boolean subset(Bag u) {
         
     }
