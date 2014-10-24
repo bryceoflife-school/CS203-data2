@@ -27,8 +27,16 @@ public class EmptyBag<D extends Comparable> implements Bag<D> {
     public Bag add(D elt){
         return new NEmptyBag(elt);
     }
+    
+    public Bag addN(D elt, int n) {
+        return new NEmptyBag(elt, n);
+    }
 
     public Bag remove(D elt){
+        return this;
+    }
+    
+    public Bag removeN(D elt, int n){
         return this;
     }
     

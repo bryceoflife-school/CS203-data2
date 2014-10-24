@@ -11,7 +11,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     // Constructor that takes root
     public NEmptyBag(D here) {
         this.here = here;
-        this.count = count;
+        this.count = 1;
         this.left = empty();
         this.right = empty();
     }
@@ -82,10 +82,26 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
             }
         }
     }
+    
+   public NEmptyBag addN(D elt, int n) {
+        if (this.here.compareTo(elt) == 0) {
+            int max = Math.max(0, this.count + n);
+            return new NEmptyBag(this.here, max, this.left, this.right);
+        } else {
+            if (elt.compareTo(this.here) < 0) {
+                return new NEmptyBag(this.here, this.count, this.left.addN(elt, n), this.right);
+            } else {
+                return new NEmptyBag(this.here, this.count, this.left, this.right.addN(elt, n));
+            }
+        }
+    }
 
     
-
     public Bag remove(D elt) {
+        return null;
+    }
+    
+    public NEmptyBag removeN(D elt, int n) {
         return null;
     }
 
@@ -94,7 +110,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     }
 
     public Bag union(Bag u) {
-        return null;
+        return left.union(right.union(u)).addN(here, this.getCount(here));
+               
     }
 
     public Bag inter(Bag u) {
