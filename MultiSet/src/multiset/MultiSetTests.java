@@ -52,6 +52,25 @@ public class MultiSetTests {
         System.out.println();
         System.out.println("Cardinality should be 4: " + B2.union(B3).cardinality());
         System.out.println("Cardinality should be 12: " + B1.union(B2).cardinality());
+        
+        // remove()
+        System.out.println();
+        System.out.println("Cardinality should be 9: " + B1.cardinality());
+        System.out.println("Cardinality should be 8: " + B1.remove(9).cardinality());
+        System.out.println("Cardinality should be 8: " + B1.remove(7).cardinality());
+        
+        
+        System.out.println("Member should be False: " + B1.remove(11).member(11));
+        System.out.println("Cardinality should be 2: " + B2.remove(10).cardinality());
+        System.out.println("Cardinality should be 0: " + B3.remove(3).cardinality());
+        
+        // removeN()
+        System.out.println();
+        System.out.println("Cardinality should be 9: " + B1.cardinality());
+        System.out.println("Cardinality should be 7: " + B1.removeN(9, 2).cardinality());
+        System.out.println("Cardinality should be 6: " + B1.removeN(7, 3).cardinality());
+        
+        
     }
 
 }

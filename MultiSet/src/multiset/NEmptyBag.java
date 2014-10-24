@@ -82,8 +82,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
             }
         }
     }
-    
-   public NEmptyBag addN(D elt, int n) {
+
+    public NEmptyBag addN(D elt, int n) {
         if (this.here.compareTo(elt) == 0) {
             int max = Math.max(0, this.count + n);
             return new NEmptyBag(this.here, max, this.left, this.right);
@@ -96,13 +96,36 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         }
     }
 
-    
     public Bag remove(D elt) {
-        return null;
+        if (this.here.compareTo(elt) == 0) {
+            if (this.count == 1) {
+                // This will remove element completely 
+                return this.left.union(this.right);
+            } else {
+                // Drop count by one if more than one exist
+                return new NEmptyBag(this.here, this.count - 1, this.left, this.right);
+            }
+        } else if (elt.compareTo(this.here) > 0) {
+            return new NEmptyBag(this.here, this.left, this.right.remove(elt));
+        } else {
+            return new NEmptyBag(this.here, this.left.remove(elt), this.right);
+        }
     }
-    
-    public NEmptyBag removeN(D elt, int n) {
-        return null;
+
+    public Bag removeN(D elt, int n) {
+        if (this.here.compareTo(elt) == 0) {
+            if (this.count <= n) {
+                // This will remove element completely 
+                return left.union(right);
+            } else {
+                // Drop count by one if more than one exist
+                return new NEmptyBag(this.here, this.count - n, this.left, this.right);
+            }
+        } else if (elt.compareTo(this.here) > 0) {
+            return new NEmptyBag(this.here, this.left, this.right.removeN(elt, n));
+        } else {
+            return new NEmptyBag(this.here, this.left.removeN(elt, n), this.right);
+        }
     }
 
     public Bag removeAll(D elt) {
@@ -111,7 +134,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag union(Bag u) {
         return left.union(right.union(u)).addN(here, this.getCount(here));
-               
+
     }
 
     public Bag inter(Bag u) {
