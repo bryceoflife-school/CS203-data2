@@ -1,11 +1,10 @@
 package multiset;
 
-
 public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     // Define global variables
     D here;
-    int count; 
+    int count;
     Bag left;
     Bag right;
 
@@ -25,10 +24,25 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         this.right = right;
     }
 
+    public NEmptyBag(D here, int count) {
+        // Setting Properties
+        this.count = count;
+        this.here = here;
+        this.left = empty();
+        this.right = empty();
+    }
+
+    public NEmptyBag(D here, Bag left, Bag right) {
+        this.count = 1;
+        this.here = here;
+        this.left = left;
+        this.right = right;
+    }
+
     public static Bag empty() {
         return new EmptyBag();
     }
-    
+
     public int cardinality() {
         return count + this.left.cardinality() + this.right.cardinality();
     }
@@ -37,8 +51,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         return false;
     }
 
-     public boolean member(D elt) {
-        if(this.here.compareTo(elt) == 0) {
+    public boolean member(D elt) {
+        if (this.here.compareTo(elt) == 0) {
             return true;
         } else if (this.here.compareTo(elt) > 0) {
             return left.member(elt);
@@ -47,8 +61,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         }
     }
 
-    public int getCount(D elt){
-        if (this.here.compareTo(elt) == 0){
+    public int getCount(D elt) {
+        if (this.here.compareTo(elt) == 0) {
             return count;
         } else if (this.here.compareTo(elt) > 0) {
             return left.getCount(elt);
@@ -56,26 +70,31 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
             return right.getCount(elt);
         }
     }
+
     public NEmptyBag add(D elt) {
-        if(this.here.compareTo(elt) == 0) {
-            return this;
-        } else if (this.here.compareTo(elt) > 0) {
-            return new NEmptyBag(this.here, count, this.left.add(elt), this.right);
+        if (this.here.compareTo(elt) == 0) {
+            return new NEmptyBag(this.here, this.count + 1, this.left, this.right);
         } else {
-            return new NEmptyBag(this.here, count, this.left, this.right.add(elt));
+            if (elt.compareTo(this.here) < 0) {
+                return new NEmptyBag(this.here, this.count, this.left.add(elt), this.right);
+            } else {
+                return new NEmptyBag(this.here, this.count, this.left, this.right.add(elt));
+            }
         }
     }
+
+    
 
     public Bag remove(D elt) {
         return null;
     }
-    
+
     public Bag removeAll(D elt) {
         return null;
     }
 
     public Bag union(Bag u) {
-       return null;
+        return null;
     }
 
     public Bag inter(Bag u) {
@@ -87,11 +106,11 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     // u : finite-set
     // Returns a set containing everything in u except those that are in t.
     public Bag diff(Bag u) {
-      return null;
+        return null;
     }
 
     public boolean equal(Bag u) {
-    return true;
+        return true;
     }
 
     public boolean subset(Bag u) {
