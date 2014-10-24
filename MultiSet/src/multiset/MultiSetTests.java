@@ -17,7 +17,7 @@ public class MultiSetTests {
                 new NEmptyBag(11, 1, empty, empty));
         Bag B2 = new NEmptyBag(10, 3, empty, empty);
         Bag B3 = new NEmptyBag(3, 1, empty, empty);
-        Bag B4 = new NEmptyBag(5, 10, new NEmptyBag(7, 2, empty, empty), empty);
+        Bag B4 = new NEmptyBag(5, 10, empty, new NEmptyBag(7, 2, empty, empty));
 
       // Hardcoded tests
         // Cardinality()
@@ -82,7 +82,10 @@ public class MultiSetTests {
         System.out.println("Cardinality should be 3: " + B2.cardinality());
         System.out.println("Cardinality should be 9: " + B1.inter(B1).cardinality());
         System.out.println("Cardinality should be 0: " + B1.inter(B2).cardinality());
-        System.out.println("Cardinality should be 18: " + B1.inter(B4).cardinality());
+        System.out.println("Cardinality should be 9: " + B1.cardinality());
+        System.out.println("Cardinality should be 12: " + B4.cardinality());
+        System.out.println("Cardinality should be 5: " + B1.inter(B4).cardinality());
+        System.out.println("Member should be True: " + B1.inter(B4).member(7));
     }
 
 }

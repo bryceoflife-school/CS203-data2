@@ -49,15 +49,16 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public boolean isEmptyHuh() {
         return false;
+//        return this.count < 1
     }
 
-    public boolean member(D elt) {
+     public boolean member(D elt) {
         if (this.here.compareTo(elt) == 0) {
-            return true;
-        } else if (this.here.compareTo(elt) > 0) {
-            return left.member(elt);
-        } else {
+            return this.count > 0;
+        } else if (this.here.compareTo(elt) < 0) {
             return right.member(elt);
+        } else {
+            return left.member(elt);
         }
     }
 
@@ -135,11 +136,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag inter(Bag u) {
         if (u.member(this.here)) {
-            if (u.getCount(here) > this.getCount(here)) {
-                return new NEmptyBag(this.here, this.getCount(here), this.left.inter(u), this.right.inter(u));
-            } else {
-                return new NEmptyBag(this.here, u.getCount(here), this.left.inter(u), this.right.inter(u));
-            }
+            int min = Math.min(u.getCount(here), this.getCount(here));
+            return new NEmptyBag(this.here,min , this.left.inter(u), this.right.inter(u));
         } else {
             return this.left.inter(u).union(this.right.inter(u));
         }
