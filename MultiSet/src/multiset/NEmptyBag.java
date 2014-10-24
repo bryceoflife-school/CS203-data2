@@ -8,6 +8,10 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     Bag left;
     Bag right;
 
+    public static Bag empty() {
+        return new EmptyBag();
+    }
+    
     // Constructor that takes root
     public NEmptyBag(D here) {
         this.here = here;
@@ -39,9 +43,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         this.right = right;
     }
 
-    public static Bag empty() {
-        return new EmptyBag();
-    }
+    
 
     public int cardinality() {
         return count + this.left.cardinality() + this.right.cardinality();
@@ -98,17 +100,12 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag remove(D elt) {
         if (this.here.compareTo(elt) == 0) {
-            if (this.count == 1) {
-                // This will remove element completely 
-                return this.left.union(this.right);
-            } else {
-                // Drop count by one if more than one exist
                 return new NEmptyBag(this.here, this.count - 1, this.left, this.right);
-            }
+        
         } else if (elt.compareTo(this.here) > 0) {
-            return new NEmptyBag(this.here, this.left, this.right.remove(elt));
+            return new NEmptyBag(this.here, this.count, this.left, this.right.remove(elt));
         } else {
-            return new NEmptyBag(this.here, this.left.remove(elt), this.right);
+            return new NEmptyBag(this.here, this.count, this.left.remove(elt), this.right);
         }
     }
 
@@ -122,9 +119,9 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
                 return new NEmptyBag(this.here, this.count - n, this.left, this.right);
             }
         } else if (elt.compareTo(this.here) > 0) {
-            return new NEmptyBag(this.here, this.left, this.right.removeN(elt, n));
+            return new NEmptyBag(this.here, this.count, this.left, this.right.removeN(elt, n));
         } else {
-            return new NEmptyBag(this.here, this.left.removeN(elt, n), this.right);
+            return new NEmptyBag(this.here, this.count, this.left.removeN(elt, n), this.right);
         }
     }
 
