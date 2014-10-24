@@ -11,7 +11,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     public static Bag empty() {
         return new EmptyBag();
     }
-    
+
     // Constructor that takes root
     public NEmptyBag(D here) {
         this.here = here;
@@ -42,8 +42,6 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         this.left = left;
         this.right = right;
     }
-
-    
 
     public int cardinality() {
         return count + this.left.cardinality() + this.right.cardinality();
@@ -100,8 +98,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag remove(D elt) {
         if (this.here.compareTo(elt) == 0) {
-                return new NEmptyBag(this.here, this.count - 1, this.left, this.right);
-        
+            return new NEmptyBag(this.here, this.count - 1, this.left, this.right);
+
         } else if (elt.compareTo(this.here) > 0) {
             return new NEmptyBag(this.here, this.count, this.left, this.right.remove(elt));
         } else {
@@ -111,13 +109,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag removeN(D elt, int n) {
         if (this.here.compareTo(elt) == 0) {
-            if (this.count <= n) {
-                // This will remove element completely 
-                return left.union(right);
-            } else {
-                // Drop count by one if more than one exist
-                return new NEmptyBag(this.here, this.count - n, this.left, this.right);
-            }
+            int max = Math.max(0, this.count - n);
+            return new NEmptyBag(this.here, max, this.left, this.right);
         } else if (elt.compareTo(this.here) > 0) {
             return new NEmptyBag(this.here, this.count, this.left, this.right.removeN(elt, n));
         } else {
@@ -126,7 +119,13 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     }
 
     public Bag removeAll(D elt) {
-        return null;
+        if (this.here.compareTo(elt) == 0) {
+            return left.union(right);
+        } else if (elt.compareTo(this.here) > 0) {
+            return new NEmptyBag(this.here, this.count, this.left, this.right.removeAll(elt));
+        } else {
+            return new NEmptyBag(this.here, this.count, this.left.removeAll(elt), this.right);
+        }
     }
 
     public Bag union(Bag u) {
@@ -135,7 +134,15 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     }
 
     public Bag inter(Bag u) {
-        return null;
+        if (u.member(this.here)) {
+            if (u.getCount(here) > this.getCount(here)) {
+                return new NEmptyBag(this.here, this.getCount(here), this.left.inter(u), this.right.inter(u));
+            } else {
+                return new NEmptyBag(this.here, u.getCount(here), this.left.inter(u), this.right.inter(u));
+            }
+        } else {
+            return this.left.inter(u).union(this.right.inter(u));
+        }
     }
 
     //(diff t u) → finite-set
