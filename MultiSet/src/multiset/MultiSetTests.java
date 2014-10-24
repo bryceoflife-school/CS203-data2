@@ -18,6 +18,7 @@ public class MultiSetTests {
         Bag B2 = new NEmptyBag(10, 3, empty, empty);
         Bag B3 = new NEmptyBag(3, 1, empty, empty);
         Bag B4 = new NEmptyBag(5, 10, empty, new NEmptyBag(7, 2, empty, empty));
+        Bag B5 = new NEmptyBag(5, 5, empty, new NEmptyBag( 7, 1, empty, empty));
 
       // Hardcoded tests
         // Cardinality()
@@ -86,6 +87,26 @@ public class MultiSetTests {
         System.out.println("Cardinality should be 12: " + B4.cardinality());
         System.out.println("Cardinality should be 5: " + B1.inter(B4).cardinality());
         System.out.println("Member should be True: " + B1.inter(B4).member(7));
+        
+        // Diff()
+        System.out.println();
+        System.out.println("Cardinality should be 9: " + B1.cardinality());
+        System.out.println("Cardinality should be 4: " + B4.diff(B1).cardinality());
+        System.out.println("Cardinality should be 7: " + B1.diff(B4).cardinality());
+        System.out.println("Member should be false: " + B1.diff(B4).member(7));
+        
+        // Subset()
+        System.out.println();
+        System.out.println("Subset should be False: " + B4.subset(B5));
+        System.out.println("Subset should be True: " + B5.subset(B4));
+        System.out.println("Subset should be True: " + B4.subset(B4));
+        
+        // equal()
+        System.out.println();
+        System.out.println("Subset should be False: " + B4.equal(B5));
+        System.out.println("Subset should be False: " + B5.equal(B4));
+        System.out.println("Subset should be True: " + B4.equal(B4));
+        
     }
 
 }

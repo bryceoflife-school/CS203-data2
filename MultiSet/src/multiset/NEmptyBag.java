@@ -143,19 +143,16 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
         }
     }
 
-    //(diff t u) → finite-set
-    // t : finite-set
-    // u : finite-set
-    // Returns a set containing everything in u except those that are in t.
     public Bag diff(Bag u) {
-        return null;
+         Bag rootless = u.removeN(here, this.getCount(here));
+        return (left.union(right)).diff(rootless);
     }
 
     public boolean equal(Bag u) {
-        return true;
+        return this.subset(u) && u.subset(this);
     }
 
     public boolean subset(Bag u) {
-        return true;
+        return (this.getCount(here) <= u.getCount(here) && this.left.union(this.right).subset(u));
     }
 }
