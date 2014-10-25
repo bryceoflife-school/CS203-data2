@@ -1,15 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package multiset;
+import java.util.Random;
+import static multiset.NEmptyBag.empty;
 
-/**
- *
- * @author BryceDaniel
- */
 public class MultiSetTests {
+    
+    public static int randInt(int min, int max) {
+        return new Random().nextInt((max - min) + 1) + min;
+    }
+
+    public static Bag randomBag(int count) {
+        if (count == 0) {
+            return empty();
+        } else {
+            return randomBag(count - 1).addN(randInt(0, 50), randInt(0, 50));
+        }
+    }
+    
+    // Logic: if bag is empty, isEmptyHuh should return true.
+    public static void testEmpty_isEmptyHuh(int count) {
+        if (count == 0) {
+            Bag Ebag = empty();
+            if (Ebag.isEmptyHuh()) {
+                System.out.println("Pass. There is nothing here to see. As it should be.");
+            } else {
+                System.out.println("Fail. There's something wrong. You're not supposed to be here.");
+
+            }
+        } else {
+            int length = randInt(1, 10);
+            Bag NEBag = randomBag(length);
+            if (!NEBag.isEmptyHuh()) {
+                System.out.println("Pass. The set is not empty. As it should be.");
+            } else {
+                System.out.println("Fail. There's something wrong. The set should not be empty.");
+            }
+        }
+
+    }
+
 
     public static void main(String[] args) {
         Bag empty = new EmptyBag();
@@ -107,6 +135,14 @@ public class MultiSetTests {
         System.out.println("Subset should be False: " + B5.equal(B4));
         System.out.println("Subset should be True: " + B4.equal(B4));
         
+        // Tests for empty() and isEmptyHuh()
+        System.out.println();
+        System.out.println("Tests for Empty() & IsEmptyHuh?");
+        System.out.println();
+        for (int i = 0; i < 50; i++) {
+            int randomInt = randInt(0, 1);
+            testEmpty_isEmptyHuh(randomInt);
+        }
     }
 
 }
