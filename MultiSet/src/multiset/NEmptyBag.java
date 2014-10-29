@@ -48,9 +48,17 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     }
 
     public boolean isEmptyHuh() {
-        return false;
-//        return this.count < 1
+       if (this.getCount(here) == 0) {
+            if (!left.isEmptyHuh()) {
+                return right.isEmptyHuh();
+            } else {
+                return left.isEmptyHuh();
+            }
+        } else {
+            return false;
+        }
     }
+    
 
      public boolean member(D elt) {
         if (this.here.compareTo(elt) == 0) {

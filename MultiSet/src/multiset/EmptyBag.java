@@ -4,9 +4,9 @@ public class EmptyBag<D extends Comparable> implements Bag<D> {
     
     public void EmptyBag(){ }
     
-    public Bag empty(){
-        return this;
-    };
+//    public Bag empty(){
+//        return this;
+//    };
     
     public int cardinality(){
         return 0;
@@ -49,7 +49,7 @@ public class EmptyBag<D extends Comparable> implements Bag<D> {
     }
     
     public Bag inter(Bag u){
-        return empty();
+        return this;
     }
     
     public Bag diff(Bag u){
