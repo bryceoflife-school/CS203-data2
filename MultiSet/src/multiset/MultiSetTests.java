@@ -148,6 +148,8 @@ public class MultiSetTests<D extends Comparable> {
         */
         // RANDOM TESTS 
         MultiSetTests integerTests = new MultiSetTests(new GenRandomInt());
+        MultiSetTests stringTests = new MultiSetTests(new GenRandomString());
+        
 
         // Tests for empty() and isEmptyHuh()
         System.out.println();
@@ -155,6 +157,7 @@ public class MultiSetTests<D extends Comparable> {
         System.out.println();
         int randomInt = randInt(0, 1);
         integerTests.testEmpty_isEmptyHuh(randomInt);
+        stringTests.testEmpty_isEmptyHuh(randomInt);
         System.out.println("Test testEmpty_isEmptyHuh run sucessfully " + testEmpty_isEmptyHuh + " times");
 
     }
