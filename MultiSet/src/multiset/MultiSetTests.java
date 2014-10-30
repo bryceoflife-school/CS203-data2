@@ -27,7 +27,9 @@ public class MultiSetTests<D extends Comparable> {
         }
     }
 
+    // Set run time counter to zero 
     static int testEmpty_isEmptyHuh = 0;
+    static int testIsEmptyHuh_Cardinality = 0;
 
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -46,6 +48,20 @@ public class MultiSetTests<D extends Comparable> {
                 }
             }
             testEmpty_isEmptyHuh++;
+        }
+    }
+    
+    // Logic: a set with a cardinality of 0 should result in isEmptyHuh() returning true.
+    public void testIsEmptyHuh_Cardinality() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            if (bag.isEmptyHuh() && bag.cardinality() != 0) {
+                throw new Exception("Fail: Empty bag has cardinality other than zero");
+            } else if (!bag.isEmptyHuh() && bag.cardinality() == 0) {
+                throw new Exception("Fail: Non-EMpty Bag has cardinaly of zero");
+            }
+            testIsEmptyHuh_Cardinality++;
         }
     }
 
@@ -153,12 +169,19 @@ public class MultiSetTests<D extends Comparable> {
 
         // Tests for empty() and isEmptyHuh()
         System.out.println();
-        System.out.println("Tests for Empty() & IsEmptyHuh?");
-        System.out.println();
+        System.out.println("Tests for Empty() & IsEmptyHuh():");
+        
         int randomInt = randInt(0, 1);
         integerTests.testEmpty_isEmptyHuh(randomInt);
         stringTests.testEmpty_isEmptyHuh(randomInt);
         System.out.println("Test testEmpty_isEmptyHuh run sucessfully " + testEmpty_isEmptyHuh + " times");
 
+        // Tests for isEmptyHuh() and cardinality()
+        System.out.println();
+        System.out.println("isEmptyHuh() and cardinality():");
+       
+        integerTests.testIsEmptyHuh_Cardinality();
+        stringTests.testIsEmptyHuh_Cardinality();
+        System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_Cardinality + " times");
     }
 }
