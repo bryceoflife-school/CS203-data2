@@ -29,11 +29,14 @@ public class MultiSetTests<D extends Comparable> {
 
     // Set run time counter to zero 
     static int testEmpty_isEmptyHuh = 0;
-    static int testIsEmptyHuh_Cardinality = 0;
+    static int testIsEmptyHuh_cardinality = 0;
     static int testCardinality_add = 0;
     static int testCardinality_getCount_remove = 0;
     static int testCardinality_addN = 0;
-    static int testAdd_Member = 0;
+    static int testAdd_member = 0;
+    static int testAdd_remove_getCount_equal = 0;
+    static int testSubset_union = 0;
+    static int testUnion_cardinality = 0;
 
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -56,7 +59,7 @@ public class MultiSetTests<D extends Comparable> {
     }
 
     // Logic: a set with a cardinality of 0 should result in isEmptyHuh() returning true.
-    public void testIsEmptyHuh_Cardinality() throws Exception {
+    public void testIsEmptyHuh_cardinality() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
@@ -65,7 +68,7 @@ public class MultiSetTests<D extends Comparable> {
             } else if (!bag.isEmptyHuh() && bag.cardinality() == 0) {
                 throw new Exception("Fail: Non-EMpty Bag has cardinaly of zero");
             }
-            testIsEmptyHuh_Cardinality++;
+            testIsEmptyHuh_cardinality++;
         }
     }
 
@@ -101,7 +104,8 @@ public class MultiSetTests<D extends Comparable> {
         }
     }
 
-    // Logic: adding and removing the same element should result in the original cardinality
+    // Logic: removing should decrease cardinality by one
+    // or not there to begin with so should remove nothing
     // We use getCount to determine if the element was in fact added
     public void testCardinality_getCount_remove() throws Exception {
         for (int i = 0; i < 50; i++) {
@@ -113,7 +117,7 @@ public class MultiSetTests<D extends Comparable> {
                 throw new Exception("Fail: Cardinality did not decrease by 1");
             }
             if (bag.getCount(randomElt) == 0 && newCard != bag.cardinality()) {
-                throw new Exception("Fail: Cardinality did not staythe same");
+                throw new Exception("Fail: Cardinality did not stay the same");
             }
             testCardinality_getCount_remove++;
         }
@@ -121,7 +125,7 @@ public class MultiSetTests<D extends Comparable> {
 
     // Logic: adding an element to the results in that element being a member of the bag.
     // Therefore member should return true.
-    public void testAdd_Member() throws Exception {
+    public void testAdd_member() throws Exception {
         for (int i = 0; i < 50; i++) {
             D randomElt = rex.getRandomObject();
             int length = randInt(0, 10);
@@ -129,14 +133,61 @@ public class MultiSetTests<D extends Comparable> {
             bag.add(randomElt);
             if (bag.getCount(randomElt) >= 1 && !bag.member(randomElt)) {
                 throw new Exception("Fail: Count increased but element not member");
-            } 
+            }
             if (bag.getCount(randomElt) == 0 && bag.member(randomElt)) {
                 throw new Exception("Fail: Count not increased but element is member");
             }
-            testAdd_Member++;
+            testAdd_member++;
         }
     }
 
+    // Logic: adding and removing the same element should result in equal bags
+    public void testAdd_remove_getCount_equal() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            D randomElt = rex.getRandomObject();
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            Bag bigBag = bag.add(randomElt);
+            if (bigBag.getCount(randomElt) - 1 != bag.getCount(randomElt)) {
+                throw new Exception("Fail: The count did not increase by one");
+            }
+            Bag littleBag = bigBag.remove(randomElt);
+            if (littleBag.getCount(randomElt) != bag.getCount(randomElt)) {
+                throw new Exception("Fail: The count should be as it originally was");
+            }
+            if (!bag.equal(littleBag)) {
+                throw new Exception("Fail: The bags should be equal");
+            }
+            testAdd_remove_getCount_equal++;
+        }
+    }
+    
+     // Logic: Two sets should be subsets of their union
+    public void testSubset_union() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            Bag bag2 = randomBag(length);
+            if (!bag.subset(bag.union(bag2)) || !bag2.subset(bag.union(bag2))) {     
+                throw new Exception("Fail: one of the bags is not a subset of their union");
+            }
+            testSubset_union++;
+        }
+    }
+
+    // Logic: | t U u | <= | t | + | u |
+    public void testUnion_cardinality() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            Bag bag2 = randomBag(length);
+            if (bag.union(bag2).cardinality() > bag.cardinality() + bag2.cardinality()) {
+                throw new Exception("Fail: The cardinality of the union cannot be greater" +
+                        " than the sum of the cardinalities of both.");
+            }
+            testUnion_cardinality++;
+        }
+    }
     public static void main(String[] args) throws Exception {
 
         // RANDOM TESTS 
@@ -156,9 +207,9 @@ public class MultiSetTests<D extends Comparable> {
         System.out.println();
         System.out.println("isEmptyHuh() and cardinality():");
 
-        integerTests.testIsEmptyHuh_Cardinality();
-        stringTests.testIsEmptyHuh_Cardinality();
-        System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_Cardinality + " times");
+        integerTests.testIsEmptyHuh_cardinality();
+        stringTests.testIsEmptyHuh_cardinality();
+        System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_cardinality + " times");
 
         // Tests for cardinality() and add()
         System.out.println();
@@ -185,14 +236,45 @@ public class MultiSetTests<D extends Comparable> {
         stringTests.testCardinality_getCount_remove();
         System.out.println("Test testCardinality_getCount_remove run sucessfully " + testCardinality_getCount_remove + " times");
 
-        // Tests for add() and member
+        // Tests for add() and member()
         System.out.println();
         System.out.println("add() and member():");
 
-        integerTests.testAdd_Member();
-        stringTests.testAdd_Member();
-        System.out.println("Test testAdd_Member run sucessfully " + testAdd_Member + " times");
+        integerTests.testAdd_member();
+        stringTests.testAdd_member();
+        System.out.println("Test testAdd_Member run sucessfully " + testAdd_member + " times");
+        
+        // Tests for add() and remove() and getCount() and Equal()
+        System.out.println();
+        System.out.println("add() and remove() and getCount() and Equal():");
+
+        integerTests.testAdd_remove_getCount_equal();
+        stringTests.testAdd_remove_getCount_equal();
+        System.out.println("Test testAdd_remove_getCount_equal run sucessfully " + testAdd_remove_getCount_equal + " times");
+    
+        // Tests for subset() and union()
+        System.out.println();
+        System.out.println("subset() and union():");
+
+        integerTests.testSubset_union();
+        stringTests.testSubset_union();
+        System.out.println("Test testSubset_union run sucessfully " + testSubset_union + " times");
+        
+        // Tests for union() and cardinality()
+        System.out.println();
+        System.out.println("union() and cardinality():");
+
+        integerTests.testUnion_cardinality();
+        stringTests.testUnion_cardinality();
+        System.out.println("Test testUnion_cardinality run sucessfully " + testUnion_cardinality + " times");
+        
+        
+        
+        
+        
     }
+    
+     
 
     public void fixedTests() {
         /*
