@@ -10,7 +10,7 @@ public class MultiSetTests<D extends Comparable> {
     }
 
     GenRandom<D> rex;
-    
+
     public static Bag empty() {
         return new EmptyBag();
     }
@@ -32,6 +32,8 @@ public class MultiSetTests<D extends Comparable> {
     static int testIsEmptyHuh_Cardinality = 0;
     static int testCardinality_add = 0;
     static int testCardinality_getCount_remove = 0;
+    static int testCardinality_addN = 0;
+    static int testAdd_Member = 0;
 
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -52,7 +54,7 @@ public class MultiSetTests<D extends Comparable> {
             testEmpty_isEmptyHuh++;
         }
     }
-    
+
     // Logic: a set with a cardinality of 0 should result in isEmptyHuh() returning true.
     public void testIsEmptyHuh_Cardinality() throws Exception {
         for (int i = 0; i < 50; i++) {
@@ -74,19 +76,35 @@ public class MultiSetTests<D extends Comparable> {
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
             int initialCard = bag.cardinality();
-            if(bag.add(rex.getRandomObject()).cardinality() != initialCard + 1){
+            if (bag.add(rex.getRandomObject()).cardinality() != initialCard + 1) {
                 throw new Exception("Fail: Cardinality did not increase by one");
-            } else if (bag.add(rex.getRandomObject()).cardinality() == initialCard){
+            } else if (bag.add(rex.getRandomObject()).cardinality() == initialCard) {
                 throw new Exception("Fail: Not adding RandomObject");
             }
             testCardinality_add++;
         }
     }
-    
+
+    // Logic: adding a random number of elements to a tree should result
+    // in the cardinality being greater by that number of elements.
+    public void testCardinality_addN(int n) throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            int initialCard = bag.cardinality();
+            if (bag.addN(rex.getRandomObject(), n).cardinality() != initialCard + n) {
+                throw new Exception("Fail: Cardinality did not increase by one");
+            } else if (bag.addN(rex.getRandomObject(), n).cardinality() == initialCard) {
+                throw new Exception("Fail: Not adding RandomObject");
+            }
+            testCardinality_addN++;
+        }
+    }
+
     // Logic: adding and removing the same element should result in the original cardinality
     // We use getCount to determine if the element was in fact added
-    public void testCardinality_getCount_remove() throws Exception{
-       for (int i = 0; i < 50; i++) {
+    public void testCardinality_getCount_remove() throws Exception {
+        for (int i = 0; i < 50; i++) {
             D randomElt = rex.getRandomObject();
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
@@ -100,18 +118,35 @@ public class MultiSetTests<D extends Comparable> {
             testCardinality_getCount_remove++;
         }
     }
-    
+
+    // Logic: adding an element to the results in that element being a member of the bag.
+    // Therefore member should return true.
+    public void testAdd_Member() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            D randomElt = rex.getRandomObject();
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            bag.add(randomElt);
+            if (bag.getCount(randomElt) >= 1 && !bag.member(randomElt)) {
+                throw new Exception("Fail: Count increased but element not member");
+            } 
+            if (bag.getCount(randomElt) == 0 && bag.member(randomElt)) {
+                throw new Exception("Fail: Count not increased but element is member");
+            }
+            testAdd_Member++;
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        
+
         // RANDOM TESTS 
         MultiSetTests integerTests = new MultiSetTests(new GenRandomInt());
         MultiSetTests stringTests = new MultiSetTests(new GenRandomString());
-        
 
         // Tests for empty() and isEmptyHuh()
         System.out.println();
         System.out.println("Tests for Empty() & IsEmptyHuh():");
-        
+
         int randomInt = randInt(0, 1);
         integerTests.testEmpty_isEmptyHuh(randomInt);
         stringTests.testEmpty_isEmptyHuh(randomInt);
@@ -120,127 +155,141 @@ public class MultiSetTests<D extends Comparable> {
         // Tests for isEmptyHuh() and cardinality()
         System.out.println();
         System.out.println("isEmptyHuh() and cardinality():");
-       
+
         integerTests.testIsEmptyHuh_Cardinality();
         stringTests.testIsEmptyHuh_Cardinality();
         System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_Cardinality + " times");
-        
+
         // Tests for cardinality() and add()
         System.out.println();
         System.out.println("cardinality() and add():");
-       
+
         integerTests.testCardinality_add();
         stringTests.testCardinality_add();
         System.out.println("Test testCardinality_add run sucessfully " + testCardinality_add + " times");
-        
+
+        // Tests for cardinality() and addN()
+        System.out.println();
+        System.out.println("cardinality() and addN():");
+
+        int randomN = randInt(1, 10);
+        integerTests.testCardinality_addN(randomN);
+        stringTests.testCardinality_addN(randomN);
+        System.out.println("Test testCardinality_addN run sucessfully " + testCardinality_addN + " times");
+
         // Tests for cardinality() and getCount() and remove()
         System.out.println();
         System.out.println("cardinality() and getCount() and remove():");
-       
+
         integerTests.testCardinality_getCount_remove();
         stringTests.testCardinality_getCount_remove();
         System.out.println("Test testCardinality_getCount_remove run sucessfully " + testCardinality_getCount_remove + " times");
-        
+
+        // Tests for add() and member
+        System.out.println();
+        System.out.println("add() and member():");
+
+        integerTests.testAdd_Member();
+        stringTests.testAdd_Member();
+        System.out.println("Test testAdd_Member run sucessfully " + testAdd_Member + " times");
     }
-    
-    
-    
-    public void fixedTests(){
+
+    public void fixedTests() {
         /*
-        Bag empty = new EmptyBag();
-        Bag B1 = new NEmptyBag(9, 2, new NEmptyBag(7, 3, new NEmptyBag(5, 3, empty, empty), empty),
-                new NEmptyBag(11, 1, empty, empty));
-        Bag B2 = new NEmptyBag(10, 3, empty, empty);
-        Bag B3 = new NEmptyBag(3, 1, empty, empty);
-        Bag B4 = new NEmptyBag(5, 10, empty, new NEmptyBag(7, 2, empty, empty));
-        Bag B5 = new NEmptyBag(5, 5, empty, new NEmptyBag(7, 1, empty, empty));
+         Bag empty = new EmptyBag();
+         Bag B1 = new NEmptyBag(9, 2, new NEmptyBag(7, 3, new NEmptyBag(5, 3, empty, empty), empty),
+         new NEmptyBag(11, 1, empty, empty));
+         Bag B2 = new NEmptyBag(10, 3, empty, empty);
+         Bag B3 = new NEmptyBag(3, 1, empty, empty);
+         Bag B4 = new NEmptyBag(5, 10, empty, new NEmptyBag(7, 2, empty, empty));
+         Bag B5 = new NEmptyBag(5, 5, empty, new NEmptyBag(7, 1, empty, empty));
 
-        // Hardcoded tests
-        // Cardinality()
-        System.out.println();
-        System.out.println("Should be 9: " + B1.cardinality());
-        System.out.println("Should be 3: " + B2.cardinality());
+         // Hardcoded tests
+         // Cardinality()
+         System.out.println();
+         System.out.println("Should be 9: " + B1.cardinality());
+         System.out.println("Should be 3: " + B2.cardinality());
 
-        // member()
-        System.out.println();
-        System.out.println("Should be true: " + B1.member(9));
-        System.out.println("Should be true: " + B1.member(11));
-        System.out.println("Should be false: " + B1.member(3));
+         // member()
+         System.out.println();
+         System.out.println("Should be true: " + B1.member(9));
+         System.out.println("Should be true: " + B1.member(11));
+         System.out.println("Should be false: " + B1.member(3));
 
-        // getCount
-        System.out.println();
-        System.out.println("Should be 3: " + B1.getCount(7));
-        System.out.println("Should be 0: " + B1.getCount(6));
+         // getCount
+         System.out.println();
+         System.out.println("Should be 3: " + B1.getCount(7));
+         System.out.println("Should be 0: " + B1.getCount(6));
 
-        // add()
-        System.out.println();
-        System.out.println("Cardinality should be 10: " + B1.add(9).cardinality());
-        System.out.println("Cardinality should be 11: " + B1.add(1).add(2).cardinality());
-        System.out.println("Cardinality should be 4: " + B2.add(1).cardinality());
+         // add()
+         System.out.println();
+         System.out.println("Cardinality should be 10: " + B1.add(9).cardinality());
+         System.out.println("Cardinality should be 11: " + B1.add(1).add(2).cardinality());
+         System.out.println("Cardinality should be 4: " + B2.add(1).cardinality());
 
-        // addN()
-        System.out.println();
-        System.out.println("Cardinality should be 14: " + B1.addN(9, 5).cardinality());
-        System.out.println("Cardinality should be 9: " + B1.addN(9, 0).cardinality());
-        System.out.println("Cardinality should be 7: " + B2.addN(2, 4).cardinality());
+         // addN()
+         System.out.println();
+         System.out.println("Cardinality should be 14: " + B1.addN(9, 5).cardinality());
+         System.out.println("Cardinality should be 9: " + B1.addN(9, 0).cardinality());
+         System.out.println("Cardinality should be 7: " + B2.addN(2, 4).cardinality());
 
-        // Union()
-        System.out.println();
-        System.out.println("Cardinality should be 4: " + B2.union(B3).cardinality());
-        System.out.println("Cardinality should be 12: " + B1.union(B2).cardinality());
+         // Union()
+         System.out.println();
+         System.out.println("Cardinality should be 4: " + B2.union(B3).cardinality());
+         System.out.println("Cardinality should be 12: " + B1.union(B2).cardinality());
 
-        // remove()
-        System.out.println();
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 8: " + B1.remove(9).cardinality());
-        System.out.println("Cardinality should be 8: " + B1.remove(7).cardinality());
-        System.out.println("Member should be False: " + B1.remove(11).member(11));
-        System.out.println("Cardinality should be 2: " + B2.remove(10).cardinality());
-        System.out.println("Cardinality should be 0: " + B3.remove(3).cardinality());
+         // remove()
+         System.out.println();
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 8: " + B1.remove(9).cardinality());
+         System.out.println("Cardinality should be 8: " + B1.remove(7).cardinality());
+         System.out.println("Member should be False: " + B1.remove(11).member(11));
+         System.out.println("Cardinality should be 2: " + B2.remove(10).cardinality());
+         System.out.println("Cardinality should be 0: " + B3.remove(3).cardinality());
 
-        // removeN()
-        System.out.println();
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 7: " + B1.removeN(9, 2).cardinality());
-        System.out.println("Cardinality should be 6: " + B1.removeN(7, 3).cardinality());
+         // removeN()
+         System.out.println();
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 7: " + B1.removeN(9, 2).cardinality());
+         System.out.println("Cardinality should be 6: " + B1.removeN(7, 3).cardinality());
 
-        // removeAll()
-        System.out.println();
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 7: " + B1.removeAll(9).cardinality());
-        System.out.println("Cardinality should be 6: " + B1.removeAll(7).cardinality());
-        System.out.println("Member should be false: " + B1.removeAll(7).member(7));
+         // removeAll()
+         System.out.println();
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 7: " + B1.removeAll(9).cardinality());
+         System.out.println("Cardinality should be 6: " + B1.removeAll(7).cardinality());
+         System.out.println("Member should be false: " + B1.removeAll(7).member(7));
 
-        // inter()
-        System.out.println();
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 3: " + B2.cardinality());
-        System.out.println("Cardinality should be 9: " + B1.inter(B1).cardinality());
-        System.out.println("Cardinality should be 0: " + B1.inter(B2).cardinality());
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 12: " + B4.cardinality());
-        System.out.println("Cardinality should be 5: " + B1.inter(B4).cardinality());
-        System.out.println("Member should be True: " + B1.inter(B4).member(7));
+         // inter()
+         System.out.println();
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 3: " + B2.cardinality());
+         System.out.println("Cardinality should be 9: " + B1.inter(B1).cardinality());
+         System.out.println("Cardinality should be 0: " + B1.inter(B2).cardinality());
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 12: " + B4.cardinality());
+         System.out.println("Cardinality should be 5: " + B1.inter(B4).cardinality());
+         System.out.println("Member should be True: " + B1.inter(B4).member(7));
 
-        // Diff()
-        System.out.println();
-        System.out.println("Cardinality should be 9: " + B1.cardinality());
-        System.out.println("Cardinality should be 4: " + B4.diff(B1).cardinality());
-        System.out.println("Cardinality should be 7: " + B1.diff(B4).cardinality());
-        System.out.println("Member should be false: " + B1.diff(B4).member(7));
+         // Diff()
+         System.out.println();
+         System.out.println("Cardinality should be 9: " + B1.cardinality());
+         System.out.println("Cardinality should be 4: " + B4.diff(B1).cardinality());
+         System.out.println("Cardinality should be 7: " + B1.diff(B4).cardinality());
+         System.out.println("Member should be false: " + B1.diff(B4).member(7));
 
-        // Subset()
-        System.out.println();
-        System.out.println("Subset should be False: " + B4.subset(B5));
-        System.out.println("Subset should be True: " + B5.subset(B4));
-        System.out.println("Subset should be True: " + B4.subset(B4));
+         // Subset()
+         System.out.println();
+         System.out.println("Subset should be False: " + B4.subset(B5));
+         System.out.println("Subset should be True: " + B5.subset(B4));
+         System.out.println("Subset should be True: " + B4.subset(B4));
 
-        // equal()
-        System.out.println();
-        System.out.println("Subset should be False: " + B4.equal(B5));
-        System.out.println("Subset should be False: " + B5.equal(B4));
-        System.out.println("Subset should be True: " + B4.equal(B4));
+         // equal()
+         System.out.println();
+         System.out.println("Subset should be False: " + B4.equal(B5));
+         System.out.println("Subset should be False: " + B5.equal(B4));
+         System.out.println("Subset should be True: " + B4.equal(B4));
 
-        */
+         */
     }
 }
