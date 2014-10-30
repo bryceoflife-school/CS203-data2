@@ -30,6 +30,8 @@ public class MultiSetTests<D extends Comparable> {
     // Set run time counter to zero 
     static int testEmpty_isEmptyHuh = 0;
     static int testIsEmptyHuh_Cardinality = 0;
+    static int testCardinality_add = 0;
+    static int testCardinality_getCount_remove = 0;
 
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -65,7 +67,85 @@ public class MultiSetTests<D extends Comparable> {
         }
     }
 
+    // Logic: adding a random number of elements to a tree should result
+    // in the cardinality being greater by that number of elements.
+    public void testCardinality_add() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            int initialCard = bag.cardinality();
+            if(bag.add(rex.getRandomObject()).cardinality() != initialCard + 1){
+                throw new Exception("Fail: Cardinality did not increase by one");
+            } else if (bag.add(rex.getRandomObject()).cardinality() == initialCard){
+                throw new Exception("Fail: Not adding RandomObject");
+            }
+            testCardinality_add++;
+        }
+    }
+    
+    // Logic: adding and removing the same element should result in the original cardinality
+    // We use getCount to determine if the element was in fact added
+    public void testCardinality_getCount_remove() throws Exception{
+       for (int i = 0; i < 50; i++) {
+            D randomElt = rex.getRandomObject();
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            int newCard = bag.remove(randomElt).cardinality();
+            if (bag.getCount(randomElt) >= 1 && newCard != bag.cardinality() - 1) {
+                throw new Exception("Fail: Cardinality did not decrease by 1");
+            }
+            if (bag.getCount(randomElt) == 0 && newCard != bag.cardinality()) {
+                throw new Exception("Fail: Cardinality did not staythe same");
+            }
+            testCardinality_getCount_remove++;
+        }
+    }
+    
     public static void main(String[] args) throws Exception {
+        
+        // RANDOM TESTS 
+        MultiSetTests integerTests = new MultiSetTests(new GenRandomInt());
+        MultiSetTests stringTests = new MultiSetTests(new GenRandomString());
+        
+
+        // Tests for empty() and isEmptyHuh()
+        System.out.println();
+        System.out.println("Tests for Empty() & IsEmptyHuh():");
+        
+        int randomInt = randInt(0, 1);
+        integerTests.testEmpty_isEmptyHuh(randomInt);
+        stringTests.testEmpty_isEmptyHuh(randomInt);
+        System.out.println("Test testEmpty_isEmptyHuh run sucessfully " + testEmpty_isEmptyHuh + " times");
+
+        // Tests for isEmptyHuh() and cardinality()
+        System.out.println();
+        System.out.println("isEmptyHuh() and cardinality():");
+       
+        integerTests.testIsEmptyHuh_Cardinality();
+        stringTests.testIsEmptyHuh_Cardinality();
+        System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_Cardinality + " times");
+        
+        // Tests for cardinality() and add()
+        System.out.println();
+        System.out.println("cardinality() and add():");
+       
+        integerTests.testCardinality_add();
+        stringTests.testCardinality_add();
+        System.out.println("Test testCardinality_add run sucessfully " + testCardinality_add + " times");
+        
+        // Tests for cardinality() and getCount() and remove()
+        System.out.println();
+        System.out.println("cardinality() and getCount() and remove():");
+       
+        integerTests.testCardinality_getCount_remove();
+        stringTests.testCardinality_getCount_remove();
+        System.out.println("Test testCardinality_getCount_remove run sucessfully " + testCardinality_getCount_remove + " times");
+        
+    }
+    
+    
+    
+    public void fixedTests(){
         /*
         Bag empty = new EmptyBag();
         Bag B1 = new NEmptyBag(9, 2, new NEmptyBag(7, 3, new NEmptyBag(5, 3, empty, empty), empty),
@@ -162,26 +242,5 @@ public class MultiSetTests<D extends Comparable> {
         System.out.println("Subset should be True: " + B4.equal(B4));
 
         */
-        // RANDOM TESTS 
-        MultiSetTests integerTests = new MultiSetTests(new GenRandomInt());
-        MultiSetTests stringTests = new MultiSetTests(new GenRandomString());
-        
-
-        // Tests for empty() and isEmptyHuh()
-        System.out.println();
-        System.out.println("Tests for Empty() & IsEmptyHuh():");
-        
-        int randomInt = randInt(0, 1);
-        integerTests.testEmpty_isEmptyHuh(randomInt);
-        stringTests.testEmpty_isEmptyHuh(randomInt);
-        System.out.println("Test testEmpty_isEmptyHuh run sucessfully " + testEmpty_isEmptyHuh + " times");
-
-        // Tests for isEmptyHuh() and cardinality()
-        System.out.println();
-        System.out.println("isEmptyHuh() and cardinality():");
-       
-        integerTests.testIsEmptyHuh_Cardinality();
-        stringTests.testIsEmptyHuh_Cardinality();
-        System.out.println("Test testIsEmptyHuh_Cardinality run sucessfully " + testIsEmptyHuh_Cardinality + " times");
     }
 }
