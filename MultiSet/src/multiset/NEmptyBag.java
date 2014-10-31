@@ -153,7 +153,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
 
     public Bag diff(Bag u) {
          Bag rootless = u.removeN(here, this.getCount(here));
-        return (left.union(right)).diff(rootless);
+        return left.union(right).diff(rootless);
     }
 
     public boolean equal(Bag u) {

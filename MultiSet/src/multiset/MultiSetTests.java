@@ -37,8 +37,9 @@ public class MultiSetTests<D extends Comparable> {
     static int testAdd_remove_getCount_equal = 0;
     static int testSubset_union = 0;
     static int testUnion_cardinality = 0;
-    static int testUnion_cardinality_inter = 0;
+    static int testDiff_member = 0;
     static int testEqual_inter = 0;
+    static int testMember_getCount_removeAll = 0;
     
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -191,24 +192,23 @@ public class MultiSetTests<D extends Comparable> {
         }
     }
     
-    // Logic: | t U u | = | t | + | u | - | t /inter u|
-    public void testUnion_cardinality_inter() throws Exception {
+    // Logic: An element in the difference of two bags should be int the second bag
+    public void testDiff_member() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
             Bag bag2 = randomBag(length);
-//            System.out.println(bag2.union(bag).cardinality());
-//            System.out.println(bag.cardinality());
-//            System.out.println(bag2.cardinality());
-//            System.out.println(bag.cardinality() + bag2.cardinality());
-//            System.out.println(bag.inter(bag2).cardinality());
-//            System.out.println(bag.cardinality() + bag2.cardinality() - bag.inter(bag2).cardinality());
-            if (bag.union(bag2).cardinality() != (bag.cardinality() + bag2.cardinality()) 
-                    - bag.inter(bag2).cardinality()) {
-                throw new Exception("Fail; The cardinality of the union of two bags" +
-                        " should be equal to the sum of both cardinalities less the intersection");
+            D elt = rex.getRandomObject();
+            if (bag.diff(bag2).member(elt)) {
+                if (!bag2.member(elt)){
+                    throw new Exception("Fail: Elt should be in bag 2");
+                }
+            } else if (!bag2.member(elt) || bag.member(elt)) {
+            } else {
+                
+                throw new Exception("Fail; Test again");
             }
-            testUnion_cardinality_inter++;
+            testDiff_member++;
         }
     }
     
@@ -223,6 +223,23 @@ public class MultiSetTests<D extends Comparable> {
                 throw new Exception ("Fail: The intersection and union of two equal sets are equal");
             }
             testEqual_inter++;
+        }
+    }
+    
+    public void testMember_getCount_removeAll() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            int randomInt = randInt(0, 10);
+            D elt = rex.getRandomObject();
+            Bag bag = randomBag(length);
+            Bag bag2 = bag.addN(elt, randomInt);
+            if (bag2.removeAll(elt).member(elt)) {
+                throw new Exception("Test failed. X should not be in newBag");
+            }
+            if (bag2.removeAll(elt).getCount(elt) != 0) {
+                throw new Exception("Test failed. X count should be 0");
+            }
+            testMember_getCount_removeAll++;
         }
     }
     
@@ -306,21 +323,32 @@ public class MultiSetTests<D extends Comparable> {
         stringTests.testUnion_cardinality();
         System.out.println("Test testUnion_cardinality run sucessfully " + testUnion_cardinality + " times");
         
-        // Tests for union() and cardinality() and inter()
+        // Tests for diff() and member()
         System.out.println();
-        System.out.println("union() and cardinality() and inter():");
+        System.out.println("diff() and member():");
 
-        integerTests.testUnion_cardinality_inter();
-        stringTests.testUnion_cardinality_inter();
-        System.out.println("Test testUnion_cardinality_inter run sucessfully " + testUnion_cardinality_inter + " times");
+        integerTests.testDiff_member();
+        stringTests.testDiff_member();
+        System.out.println("Test testDiff_member run sucessfully " + testDiff_member + " times");
         
-        // Tests for equal() and inter() and cardinality()
+        // Tests for equal() and inter()
         System.out.println();
-        System.out.println("equal() and inter() and cardinality():");
+        System.out.println("equal() and inter():");
 
         integerTests.testEqual_inter();
         stringTests.testEqual_inter();
         System.out.println("Test testEqual_inter run sucessfully " + testEqual_inter + " times");
+        
+        // Tests for member() and getCount() and removeAll
+        System.out.println();
+        System.out.println("member() and getCount() and removeAll:");
+
+        integerTests.testMember_getCount_removeAll();
+        stringTests.testMember_getCount_removeAll();
+        System.out.println("Test testMember_getCount_removeAll run sucessfully " + testMember_getCount_removeAll + " times");
+        
+        
+        
         
     }
     
