@@ -145,7 +145,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     public Bag inter(Bag u) {
         if (u.member(this.here)) {
             int min = Math.min(u.getCount(here), this.getCount(here));
-            return new NEmptyBag(this.here,min , this.left.inter(u), this.right.inter(u));
+            return new NEmptyBag(this.here, min , this.left.inter(u), this.right.inter(u));
         } else {
             return this.left.inter(u).union(this.right.inter(u));
         }

@@ -37,7 +37,9 @@ public class MultiSetTests<D extends Comparable> {
     static int testAdd_remove_getCount_equal = 0;
     static int testSubset_union = 0;
     static int testUnion_cardinality = 0;
-
+    static int testUnion_cardinality_inter = 0;
+    static int testEqual_inter = 0;
+    
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
     public void testEmpty_isEmptyHuh(int count) throws Exception {
@@ -188,6 +190,42 @@ public class MultiSetTests<D extends Comparable> {
             testUnion_cardinality++;
         }
     }
+    
+    // Logic: | t U u | = | t | + | u | - | t /inter u|
+    public void testUnion_cardinality_inter() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            Bag bag2 = randomBag(length);
+//            System.out.println(bag2.union(bag).cardinality());
+//            System.out.println(bag.cardinality());
+//            System.out.println(bag2.cardinality());
+//            System.out.println(bag.cardinality() + bag2.cardinality());
+//            System.out.println(bag.inter(bag2).cardinality());
+//            System.out.println(bag.cardinality() + bag2.cardinality() - bag.inter(bag2).cardinality());
+            if (bag.union(bag2).cardinality() != (bag.cardinality() + bag2.cardinality()) 
+                    - bag.inter(bag2).cardinality()) {
+                throw new Exception("Fail; The cardinality of the union of two bags" +
+                        " should be equal to the sum of both cardinalities less the intersection");
+            }
+            testUnion_cardinality_inter++;
+        }
+    }
+    
+     // Logic: If two sets are equal, then the cardinality of their intersecition will be the same as
+    // The cardinality of each set.
+    public void testEqual_inter() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            Bag bag2 = randomBag(length);
+            if (bag.union(bag2).equal(bag.inter(bag2)) && !bag.equal(bag2)){
+                throw new Exception ("Fail: The intersection and union of two equal sets are equal");
+            }
+            testEqual_inter++;
+        }
+    }
+    
     public static void main(String[] args) throws Exception {
 
         // RANDOM TESTS 
@@ -268,9 +306,21 @@ public class MultiSetTests<D extends Comparable> {
         stringTests.testUnion_cardinality();
         System.out.println("Test testUnion_cardinality run sucessfully " + testUnion_cardinality + " times");
         
+        // Tests for union() and cardinality() and inter()
+        System.out.println();
+        System.out.println("union() and cardinality() and inter():");
+
+        integerTests.testUnion_cardinality_inter();
+        stringTests.testUnion_cardinality_inter();
+        System.out.println("Test testUnion_cardinality_inter run sucessfully " + testUnion_cardinality_inter + " times");
         
-        
-        
+        // Tests for equal() and inter() and cardinality()
+        System.out.println();
+        System.out.println("equal() and inter() and cardinality():");
+
+        integerTests.testEqual_inter();
+        stringTests.testEqual_inter();
+        System.out.println("Test testEqual_inter run sucessfully " + testEqual_inter + " times");
         
     }
     
