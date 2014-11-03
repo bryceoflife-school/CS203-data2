@@ -3,25 +3,11 @@ package multiset;
 
 import java.util.Iterator;
 
-/**
- *
- * @author BryceDaniel
- */
-public class Sequence<D extends Comparable > implements Iterator {
-    D here;
-    Sequence<D> next; 
+interface Sequence<D extends Comparable> {
     
-    public D here(){
-        return null;
-    }
-    
-    public boolean hasNext(){
-        return true;
-    }
-    
-    public Sequence<D> next(){
-        return null;
-    }
+    public D here();
+    public boolean notEmpty();   
+    public Sequence<D> next();
     
 }
 // empty, concatonated, duplicates
