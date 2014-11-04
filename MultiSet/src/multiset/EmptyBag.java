@@ -65,6 +65,22 @@ public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
      
     }
     
+    // Balancing
+    
+    public Bag blacken(){
+        return new EmptyBag();
+    }
+  
+    public Bag balance(){
+        return new EmptyBag();
+    }
+  
+    public Bag addInner(D elt, int n){
+        return new EmptyBag();
+    }
+    
+    // Sequences
+    
     public Sequence<D> seq() {
         return new EmptySequence();
     }
