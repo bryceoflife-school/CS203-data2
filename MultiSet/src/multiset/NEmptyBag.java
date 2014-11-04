@@ -1,13 +1,19 @@
 package multiset;
 
+
 public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 
     // Define global variables
-    int color; // 1 is Black, 2 is Red
+//    int color; // 1 is Black, 2 is Red
+    private static final boolean red   = true;
+    private static final boolean black = false;
+    private boolean color;
+    
     D here;
     int count;
     Bag left;
     Bag right;
+    
 
     public static Bag empty() {
         return new EmptyBag();
@@ -33,6 +39,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         // Setting Properties
         this.count = count;
         this.here = here;
+        this.color = red;
         this.left = empty();
         this.right = empty();
     }
@@ -44,7 +51,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         this.right = right;
     }
     
-    public NEmptyBag(D here, int count, int color, Bag left, Bag right) {
+    public NEmptyBag(D here, int count, boolean color, Bag left, Bag right) {
         this.count = count;
         this.here = here;
         this.color = color;
@@ -176,7 +183,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     // Balancing 
     
     public Bag blacken(){
-        return new NEmptyBag(this.here, this.count, 1, this.left, this.right);
+        return new NEmptyBag(this.here, this.count, black, this.left, this.right);
     }
   
     public Bag balance(){ 
