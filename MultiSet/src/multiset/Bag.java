@@ -1,6 +1,6 @@
 package multiset;
 
-public interface Bag<D extends Comparable>  {
+public interface Bag<D extends Comparable> extends Sequenced<D>  {
     public int cardinality();
     public boolean isEmptyHuh();
     public boolean member(D elt);
@@ -15,5 +15,7 @@ public interface Bag<D extends Comparable>  {
     public Bag diff(Bag u);
     public boolean equal(Bag u);
     public boolean subset(Bag u);
+    public Sequence<D> seq();
+    public int countIt();
     
 }

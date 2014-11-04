@@ -5,7 +5,6 @@ public class Sequence_Cat<D extends Comparable> implements Sequence<D> {
     Sequence<D> right;
 
     Sequence_Cat (Sequence l, Sequence r) {
-        System.out.println("Alloc");
         this.left = l;
         this.right = r;
     }

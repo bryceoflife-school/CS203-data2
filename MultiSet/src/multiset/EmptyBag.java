@@ -1,6 +1,6 @@
 package multiset;
 
-public class EmptyBag<D extends Comparable> implements Bag<D> {
+public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     
     public void EmptyBag(){ }
     
@@ -64,5 +64,12 @@ public class EmptyBag<D extends Comparable> implements Bag<D> {
         return true;
      
     }
+    
+    public Sequence<D> seq() {
+        return new EmptySequence();
+    }
      
+    public int countIt(){
+        return 0;
+    }
 }

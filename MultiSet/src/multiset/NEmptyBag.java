@@ -1,6 +1,6 @@
 package multiset;
 
-public class NEmptyBag<D extends Comparable> implements Bag<D> {
+public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 
     // Define global variables
     D here;
@@ -163,4 +163,23 @@ public class NEmptyBag<D extends Comparable> implements Bag<D> {
     public boolean subset(Bag u) {
         return (this.getCount(here) <= u.getCount(here) && this.left.union(this.right).subset(u));
     }
+    
+    // Sequences
+    
+    public Sequence<D> seq() {
+        return new NEmptySequence(here, count, (new Sequence_Cat(this.left.seq(), this.right.seq())));
+    }
+    
+    public int countIt() {
+        return countItS(this.seq());
+    }
+    public int countItS(Sequence<D> as) {
+        int counter = 0;
+        while ( as.notEmpty() ) {
+            counter = counter + 1;
+            as = as.next();
+        }
+        return counter;
+    }
+    
 }

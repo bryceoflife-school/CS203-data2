@@ -40,6 +40,7 @@ public class MultiSetTests<D extends Comparable> {
     static int testDiff_member = 0;
     static int testEqual_inter = 0;
     static int testMember_getCount_removeAll = 0;
+    static int testCountIt_Cardinality = 0;
     
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
@@ -243,6 +244,18 @@ public class MultiSetTests<D extends Comparable> {
         }
     }
     
+    public void testCountIt_Cardinality() throws Exception {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            int randomInt = randInt(0, 10);
+            Bag bag = randomBag(length);
+            if (bag.countIt() != bag.cardinality()) {
+                throw new Exception ("Test failed. Count and cardinality should be equal.");
+            }
+            testCountIt_Cardinality++;
+        }
+    }
+    
     public static void main(String[] args) throws Exception {
 
         // RANDOM TESTS 
@@ -347,6 +360,13 @@ public class MultiSetTests<D extends Comparable> {
         stringTests.testMember_getCount_removeAll();
         System.out.println("Test testMember_getCount_removeAll run sucessfully " + testMember_getCount_removeAll + " times");
         
+        // Tests for countIt() and cardinality()
+        System.out.println();
+        System.out.println("countIt() and cardinality():");
+
+        integerTests.testCountIt_Cardinality();
+        stringTests.testCountIt_Cardinality();
+        System.out.println("Test testCountIt_Cardinality run sucessfully " + testCountIt_Cardinality + " times");
         
         
         
