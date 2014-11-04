@@ -182,4 +182,17 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         return counter;
     }
     
+    public String toStringIt() {
+        return toStringIts(this.seq());
+    }
+    
+    public String toStringIts(Sequence<D> as){
+        StringBuffer string = new StringBuffer("");
+        while (as.notEmpty()) {
+           string.append(as.next().makeString());
+           string.append(" ");
+           as = as.next();
+        }
+        return string.toString();
+    }
 }

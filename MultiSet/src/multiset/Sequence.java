@@ -8,6 +8,7 @@ interface Sequence<D extends Comparable> {
     public D here();
     public boolean notEmpty();   
     public Sequence<D> next();
+    public String makeString();
     
 }
 // empty, concatonated, duplicates

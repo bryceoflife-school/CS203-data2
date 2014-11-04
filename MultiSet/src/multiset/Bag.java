@@ -17,5 +17,6 @@ public interface Bag<D extends Comparable> extends Sequenced<D>  {
     public boolean subset(Bag u);
     public Sequence<D> seq();
     public int countIt();
+    public String toStringIt();
     
 }

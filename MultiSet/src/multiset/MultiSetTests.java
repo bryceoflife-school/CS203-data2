@@ -41,7 +41,7 @@ public class MultiSetTests<D extends Comparable> {
     static int testEqual_inter = 0;
     static int testMember_getCount_removeAll = 0;
     static int testCountIt_Cardinality = 0;
-    
+
     // Testing begins 
     // Logic: if bag is empty, isEmptyHuh should return true.
     public void testEmpty_isEmptyHuh(int count) throws Exception {
@@ -165,14 +165,14 @@ public class MultiSetTests<D extends Comparable> {
             testAdd_remove_getCount_equal++;
         }
     }
-    
-     // Logic: Two sets should be subsets of their union
+
+    // Logic: Two sets should be subsets of their union
     public void testSubset_union() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
             Bag bag2 = randomBag(length);
-            if (!bag.subset(bag.union(bag2)) || !bag2.subset(bag.union(bag2))) {     
+            if (!bag.subset(bag.union(bag2)) || !bag2.subset(bag.union(bag2))) {
                 throw new Exception("Fail: one of the bags is not a subset of their union");
             }
             testSubset_union++;
@@ -186,13 +186,13 @@ public class MultiSetTests<D extends Comparable> {
             Bag bag = randomBag(length);
             Bag bag2 = randomBag(length);
             if (bag.union(bag2).cardinality() > bag.cardinality() + bag2.cardinality()) {
-                throw new Exception("Fail: The cardinality of the union cannot be greater" +
-                        " than the sum of the cardinalities of both.");
+                throw new Exception("Fail: The cardinality of the union cannot be greater"
+                        + " than the sum of the cardinalities of both.");
             }
             testUnion_cardinality++;
         }
     }
-    
+
     // Logic: An element in the difference of two bags should be int the second bag
     public void testDiff_member() throws Exception {
         for (int i = 0; i < 50; i++) {
@@ -201,32 +201,32 @@ public class MultiSetTests<D extends Comparable> {
             Bag bag2 = randomBag(length);
             D elt = rex.getRandomObject();
             if (bag.diff(bag2).member(elt)) {
-                if (!bag2.member(elt)){
+                if (!bag2.member(elt)) {
                     throw new Exception("Fail: Elt should be in bag 2");
                 }
             } else if (!bag2.member(elt) || bag.member(elt)) {
             } else {
-                
+
                 throw new Exception("Fail; Test again");
             }
             testDiff_member++;
         }
     }
-    
-     // Logic: If two sets are equal, then the cardinality of their intersecition will be the same as
+
+    // Logic: If two sets are equal, then the cardinality of their intersecition will be the same as
     // The cardinality of each set.
     public void testEqual_inter() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
             Bag bag = randomBag(length);
             Bag bag2 = randomBag(length);
-            if (bag.union(bag2).equal(bag.inter(bag2)) && !bag.equal(bag2)){
-                throw new Exception ("Fail: The intersection and union of two equal sets are equal");
+            if (bag.union(bag2).equal(bag.inter(bag2)) && !bag.equal(bag2)) {
+                throw new Exception("Fail: The intersection and union of two equal sets are equal");
             }
             testEqual_inter++;
         }
     }
-    
+
     public void testMember_getCount_removeAll() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
@@ -243,19 +243,26 @@ public class MultiSetTests<D extends Comparable> {
             testMember_getCount_removeAll++;
         }
     }
-    
+
     public void testCountIt_Cardinality() throws Exception {
         for (int i = 0; i < 50; i++) {
             int length = randInt(0, 10);
-            int randomInt = randInt(0, 10);
             Bag bag = randomBag(length);
             if (bag.countIt() != bag.cardinality()) {
-                throw new Exception ("Test failed. Count and cardinality should be equal.");
+                throw new Exception("Test failed. Count and cardinality should be equal.");
             }
             testCountIt_Cardinality++;
         }
     }
-    
+
+    public void testToStringIt() {
+        for (int i = 0; i < 50; i++) {
+            int length = randInt(0, 10);
+            Bag bag = randomBag(length);
+            System.out.println("Sequencing Output: " + bag.toStringIt());
+        }
+    }
+
     public static void main(String[] args) throws Exception {
 
         // RANDOM TESTS 
@@ -311,7 +318,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testAdd_member();
         stringTests.testAdd_member();
         System.out.println("Test testAdd_Member run sucessfully " + testAdd_member + " times");
-        
+
         // Tests for add() and remove() and getCount() and Equal()
         System.out.println();
         System.out.println("add() and remove() and getCount() and Equal():");
@@ -319,7 +326,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testAdd_remove_getCount_equal();
         stringTests.testAdd_remove_getCount_equal();
         System.out.println("Test testAdd_remove_getCount_equal run sucessfully " + testAdd_remove_getCount_equal + " times");
-    
+
         // Tests for subset() and union()
         System.out.println();
         System.out.println("subset() and union():");
@@ -327,7 +334,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testSubset_union();
         stringTests.testSubset_union();
         System.out.println("Test testSubset_union run sucessfully " + testSubset_union + " times");
-        
+
         // Tests for union() and cardinality()
         System.out.println();
         System.out.println("union() and cardinality():");
@@ -335,7 +342,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testUnion_cardinality();
         stringTests.testUnion_cardinality();
         System.out.println("Test testUnion_cardinality run sucessfully " + testUnion_cardinality + " times");
-        
+
         // Tests for diff() and member()
         System.out.println();
         System.out.println("diff() and member():");
@@ -343,7 +350,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testDiff_member();
         stringTests.testDiff_member();
         System.out.println("Test testDiff_member run sucessfully " + testDiff_member + " times");
-        
+
         // Tests for equal() and inter()
         System.out.println();
         System.out.println("equal() and inter():");
@@ -351,7 +358,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testEqual_inter();
         stringTests.testEqual_inter();
         System.out.println("Test testEqual_inter run sucessfully " + testEqual_inter + " times");
-        
+
         // Tests for member() and getCount() and removeAll
         System.out.println();
         System.out.println("member() and getCount() and removeAll:");
@@ -359,7 +366,7 @@ public class MultiSetTests<D extends Comparable> {
         integerTests.testMember_getCount_removeAll();
         stringTests.testMember_getCount_removeAll();
         System.out.println("Test testMember_getCount_removeAll run sucessfully " + testMember_getCount_removeAll + " times");
-        
+
         // Tests for countIt() and cardinality()
         System.out.println();
         System.out.println("countIt() and cardinality():");
@@ -368,11 +375,15 @@ public class MultiSetTests<D extends Comparable> {
         stringTests.testCountIt_Cardinality();
         System.out.println("Test testCountIt_Cardinality run sucessfully " + testCountIt_Cardinality + " times");
         
+        // Tests for toStringIt()
+        System.out.println();
+        System.out.println("toStringIt():");
+
+        integerTests.testToStringIt();
+        stringTests.testToStringIt();
         
-        
+
     }
-    
-     
 
     public void fixedTests() {
         /*

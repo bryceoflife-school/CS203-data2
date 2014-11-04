@@ -28,4 +28,8 @@ public class NEmptySequence<D extends Comparable> implements Sequenced<D>, Seque
             return next;
         }
     }
+    
+     public String makeString() {
+        return "" + this.here;
+    }
 }

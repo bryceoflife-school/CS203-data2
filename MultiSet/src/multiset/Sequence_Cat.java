@@ -28,4 +28,8 @@ public class Sequence_Cat<D extends Comparable> implements Sequence<D> {
             return this.right.next();
         }
     }
+    
+    public String makeString() {
+        return this.left.makeString() + " " + this.right.makeString();
+    }
 }

@@ -14,4 +14,8 @@ public class EmptySequence<D extends Comparable> implements Sequence<D> {
     public Sequence<D> next() { 
         return this; 
     }
+    
+     public String makeString() {
+        return "";
+    }
 }

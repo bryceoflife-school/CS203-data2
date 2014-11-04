@@ -72,4 +72,12 @@ public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     public int countIt(){
         return 0;
     }
+    
+    public String toStringIt() {
+        return toStringIts(this.seq());
+    }
+    
+    public String toStringIts(Sequence<D> as){
+        return "";
+    }
 }
