@@ -189,9 +189,18 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     }
   
     public Bag<D> addInner(D elt, int n){
-        return null;
+        if (elt.compareTo(this.here) == 0){
+            return new NEmptyBag(this.here, this.count + n, this.isRedHuh, this.left, this.right);
+        } else if (elt.compareTo(this.here) < 0){
+            return new NEmptyBag(this.here, this.count, this.isRedHuh, this.left.addInner(elt, n), this.right).balance();
+        } else {
+            return new NEmptyBag(this.here, this.count, this.isRedHuh, this.left, this.right.addInner(elt,n)).balance();
+        }
     }
     
+    public Bag<D> rbInsert(D elt, int n) {
+        return this.addInner(elt, n).blacken();
+    }
     
     // Sequences
     
