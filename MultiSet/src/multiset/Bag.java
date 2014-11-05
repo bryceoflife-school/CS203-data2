@@ -40,6 +40,7 @@ public interface Bag<D extends Comparable> extends Sequenced<D> {
     
     public Bag<D> rbInsert(D elt, int n);
     
+    public boolean isRedHuh();
 // Sequencing Methods
 
     public Sequence<D> seq();

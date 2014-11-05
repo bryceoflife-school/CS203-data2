@@ -1,17 +1,15 @@
 package multiset;
 
-
 public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 
     // Define global variables
 //    int color; // 1 is Black, 2 is Red
-    boolean isRedHuh;
-    
+    boolean isRed;
+
     D here;
     int count;
     Bag left;
     Bag right;
-    
 
     public static Bag empty() {
         return new EmptyBag();
@@ -37,7 +35,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         // Setting Properties
         this.count = count;
         this.here = here;
-        this.isRedHuh = true; 
+        this.isRed = true;
         this.left = empty();
         this.right = empty();
     }
@@ -48,11 +46,11 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         this.left = left;
         this.right = right;
     }
-    
-    public NEmptyBag(D here, int count, boolean isRedHuh, Bag<D> left, Bag<D> right) {
+
+    public NEmptyBag(D here, int count, boolean isRed, Bag<D> left, Bag<D> right) {
         this.count = count;
         this.here = here;
-        this.isRedHuh = isRedHuh;
+        this.isRed = isRed;
         this.left = left;
         this.right = right;
     }
@@ -62,7 +60,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     }
 
     public boolean isEmptyHuh() {
-       if (this.getCount(here) == 0) {
+        if (this.getCount(here) == 0) {
             if (!left.isEmptyHuh()) {
                 return right.isEmptyHuh();
             } else {
@@ -72,9 +70,8 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
             return false;
         }
     }
-    
 
-     public boolean member(D elt) {
+    public boolean member(D elt) {
         if (this.here.compareTo(elt) == 0) {
             return this.count > 0;
         } else if (this.here.compareTo(elt) < 0) {
@@ -159,14 +156,14 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     public Bag<D> inter(Bag<D> u) {
         if (u.member(this.here)) {
             int min = Math.min(u.getCount(here), this.getCount(here));
-            return new NEmptyBag(this.here, min , this.left.inter(u), this.right.inter(u));
+            return new NEmptyBag(this.here, min, this.left.inter(u), this.right.inter(u));
         } else {
             return this.left.inter(u).union(this.right.inter(u));
         }
     }
 
     public Bag<D> diff(Bag<D> u) {
-         Bag rootless = u.removeN(here, this.getCount(here));
+        Bag rootless = u.removeN(here, this.getCount(here));
         return left.union(right).diff(rootless);
     }
 
@@ -177,59 +174,128 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     public boolean subset(Bag<D> u) {
         return (this.getCount(here) <= u.getCount(here) && this.left.union(this.right).subset(u));
     }
-    
+
     // Balancing 
-    
-    public Bag<D> blacken(){
+    public Bag<D> blacken() {
         return new NEmptyBag(this.here, this.count, false, this.left, this.right);
     }
-  
-    public Bag<D> balance(){ 
-        return null;
+
+    public boolean isRedHuh() {
+        return isRed;
     }
-  
-    public Bag<D> addInner(D elt, int n){
-        if (elt.compareTo(this.here) == 0){
-            return new NEmptyBag(this.here, this.count + n, this.isRedHuh, this.left, this.right);
-        } else if (elt.compareTo(this.here) < 0){
-            return new NEmptyBag(this.here, this.count, this.isRedHuh, this.left.addInner(elt, n), this.right).balance();
+
+    private Bag<D> balance() {
+        // Convenience Variables 
+        NEmptyBag left;
+        NEmptyBag leftOfLeft;
+        NEmptyBag leftOfRight;
+        NEmptyBag right;
+        NEmptyBag rightOfLeft;
+        NEmptyBag rightOfRight;
+
+        // Case 1
+        if ((!this.isRedHuh() && (this.left instanceof NEmptyBag) && ((NEmptyBag) this.left).isRedHuh()
+                && ((NEmptyBag) this.left).left.isRedHuh())) {
+
+            left = ((NEmptyBag) this.left);
+            leftOfLeft = ((NEmptyBag) left.left);
+
+            return new NEmptyBag(
+                    left.here,
+                    left.count,
+                    true,
+                    new NEmptyBag(leftOfLeft.here, leftOfLeft.count, false, leftOfLeft.left, leftOfLeft.right),
+                    new NEmptyBag(this.here, this.count, false, leftOfLeft.right, this.right));
+            
+        // Case 2    
+        } else if ((!this.isRedHuh() && (this.left instanceof NEmptyBag) && ((NEmptyBag) this.left).isRedHuh()
+                && ((NEmptyBag) this.left).right.isRedHuh())) {
+            
+            left = ((NEmptyBag) this.left);
+            leftOfLeft = ((NEmptyBag) left.left);
+            leftOfRight = ((NEmptyBag) left.right);
+            
+            return new NEmptyBag(
+                    leftOfRight.here,
+                    leftOfRight.count,
+                    true,
+                    new NEmptyBag(left.here, left.count, false, leftOfLeft, leftOfRight.left),
+                    new NEmptyBag(this.here, this.count, false, leftOfRight.right, this.right));
+        // Case 3    
+        } else if ((!this.isRedHuh() && (this.right instanceof NEmptyBag) && ((NEmptyBag) this.right).isRedHuh()
+                && ((NEmptyBag) this.right).left.isRedHuh())) {
+            
+            right = ((NEmptyBag) this.right);
+            rightOfLeft = ((NEmptyBag) right.right);
+            
+            return new NEmptyBag(
+                    rightOfLeft.here,
+                    rightOfLeft.count,
+                    true,
+                    new NEmptyBag(this.here, this.count, false, this.left, rightOfLeft.left),
+                    new NEmptyBag(right.here, right.count, false, rightOfLeft.right, right.right));
+        // Case 4    
+        } else if ((!this.isRedHuh() && (this.right instanceof NEmptyBag) && ((NEmptyBag) this.right).isRedHuh()
+                && ((NEmptyBag) this.right).right.isRedHuh())) {
+            
+            right = ((NEmptyBag) this.right);
+            rightOfRight = ((NEmptyBag) right.right);
+            rightOfLeft = ((NEmptyBag) right.left);
+            
+            return new NEmptyBag(
+                    right.here,
+                    right.count,
+                    true,
+                    new NEmptyBag(this.here, this.count, false, this.left, rightOfLeft),
+                    new NEmptyBag(rightOfRight.here, rightOfRight.count, false, rightOfRight.left, rightOfRight.right));
+        // Case 5
         } else {
-            return new NEmptyBag(this.here, this.count, this.isRedHuh, this.left, this.right.addInner(elt,n)).balance();
+            return this;
         }
     }
-    
+
+    public Bag<D> addInner(D elt, int n) {
+        if (elt.compareTo(this.here) == 0) {
+            return new NEmptyBag(this.here, this.count + n, this.isRed, this.left, this.right);
+        } else if (elt.compareTo(this.here) < 0) {
+            return new NEmptyBag(this.here, this.count, this.isRed, this.left.addInner(elt, n), this.right).balance();
+        } else {
+            return new NEmptyBag(this.here, this.count, this.isRed, this.left, this.right.addInner(elt, n)).balance();
+        }
+    }
+
     public Bag<D> rbInsert(D elt, int n) {
         return this.addInner(elt, n).blacken();
     }
-    
+
     // Sequences
-    
     public Sequence<D> seq() {
         return new NEmptySequence(here, count, (new Sequence_Cat(this.left.seq(), this.right.seq())));
     }
-    
+
     public int countIt() {
         return countItS(this.seq());
     }
+
     public int countItS(Sequence<D> as) {
         int counter = 0;
-        while ( as.notEmpty() ) {
+        while (as.notEmpty()) {
             counter = counter + 1;
             as = as.next();
         }
         return counter;
     }
-    
+
     public String toStringIt() {
         return toStringIts(this.seq());
     }
-    
-    public String toStringIts(Sequence<D> as){
+
+    public String toStringIts(Sequence<D> as) {
         StringBuffer string = new StringBuffer("");
         while (as.notEmpty()) {
-           string.append(as.next().makeString());
-           string.append(" ");
-           as = as.next();
+            string.append(as.next().makeString());
+            string.append(" ");
+            as = as.next();
         }
         return string.toString();
     }

@@ -1,8 +1,15 @@
 package multiset;
 
 public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
+    boolean isRed;
     
-    public void EmptyBag(){ }
+    public void EmptyBag(){ 
+        this.isRed = isRed;
+    }
+    
+    public void EmptyBag(boolean isRed){
+        this.isRed = isRed;
+    }
     
 //    public Bag empty(){
 //        return this;
@@ -83,6 +90,9 @@ public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         return this.addInner(elt, n).blacken();
     }
     
+    public boolean isRedHuh() {
+        return isRed;
+    }
     // Sequences
     
     public Sequence<D> seq() {
