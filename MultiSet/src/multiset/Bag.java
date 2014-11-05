@@ -1,5 +1,11 @@
 package multiset;
 
+/**
+ * An interface that sets up the Multi-Set Bag
+ * @author BryceDaniel
+ * @param <D> A generic type object 
+ * 
+ */
 public interface Bag<D extends Comparable> extends Sequenced<D> {
 
     public int cardinality();

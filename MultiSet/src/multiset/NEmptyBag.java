@@ -1,11 +1,15 @@
 package multiset;
 
+/**
+ * Represents a Non-Empty Multi Set Bag
+ * @author BryceDaniel
+ * @param <D> 
+ */
 public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 
     // Define global variables
-//    int color; // 1 is Black, 2 is Red
+    
     boolean isRed;
-
     D here;
     int count;
     Bag left;
@@ -15,7 +19,11 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         return new EmptyBag();
     }
 
-    // Constructor that takes root
+    
+    /**
+     * A Constructor that takes root (here) and sets up the Non-Empty Bag
+     * @param here A generic type object
+     */
     public NEmptyBag(D here) {
         this.here = here;
         this.count = 1;
@@ -23,7 +31,13 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         this.right = empty();
     }
 
-    // Constructor that takes root, left and right
+    /**
+     * A constructor that takes here, count, left, right and sets up the Non-Empty Bag
+     * @param here A generic type object
+     * @param count The "value"; number of times item appears in set bag.
+     * @param left The left child of the tree
+     * @param right The right child of the tree
+     */
     public NEmptyBag(D here, int count, Bag<D> left, Bag<D> right) {
         this.here = here;
         this.count = count;
@@ -31,6 +45,11 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         this.right = right;
     }
 
+    /**
+     * A constructor that takes here, count, and sets up the Non-Empty Bag
+     * @param here
+     * @param count 
+     */
     public NEmptyBag(D here, int count) {
         // Setting Properties
         this.count = count;
