@@ -5,9 +5,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 
     // Define global variables
 //    int color; // 1 is Black, 2 is Red
-    private static final boolean red   = true;
-    private static final boolean black = false;
-    private boolean color;
+    boolean isRedHuh;
     
     D here;
     int count;
@@ -28,7 +26,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
     }
 
     // Constructor that takes root, left and right
-    public NEmptyBag(D here, int count, Bag left, Bag right) {
+    public NEmptyBag(D here, int count, Bag<D> left, Bag<D> right) {
         this.here = here;
         this.count = count;
         this.left = left;
@@ -39,22 +37,22 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         // Setting Properties
         this.count = count;
         this.here = here;
-        this.color = red;
+        this.isRedHuh = true; 
         this.left = empty();
         this.right = empty();
     }
 
-    public NEmptyBag(D here, Bag left, Bag right) {
+    public NEmptyBag(D here, Bag<D> left, Bag<D> right) {
         this.count = 1;
         this.here = here;
         this.left = left;
         this.right = right;
     }
     
-    public NEmptyBag(D here, int count, boolean color, Bag left, Bag right) {
+    public NEmptyBag(D here, int count, boolean isRedHuh, Bag<D> left, Bag<D> right) {
         this.count = count;
         this.here = here;
-        this.color = color;
+        this.isRedHuh = isRedHuh;
         this.left = left;
         this.right = right;
     }
@@ -96,7 +94,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public NEmptyBag add(D elt) {
+    public Bag<D> add(D elt) {
         if (this.here.compareTo(elt) == 0) {
             return new NEmptyBag(this.here, this.count + 1, this.left, this.right);
         } else {
@@ -108,7 +106,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public NEmptyBag addN(D elt, int n) {
+    public Bag<D> addN(D elt, int n) {
         if (this.here.compareTo(elt) == 0) {
             int max = Math.max(0, this.count + n);
             return new NEmptyBag(this.here, max, this.left, this.right);
@@ -121,7 +119,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public Bag remove(D elt) {
+    public Bag<D> remove(D elt) {
         if (this.here.compareTo(elt) == 0) {
             return new NEmptyBag(this.here, this.count - 1, this.left, this.right);
 
@@ -132,7 +130,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public Bag removeN(D elt, int n) {
+    public Bag<D> removeN(D elt, int n) {
         if (this.here.compareTo(elt) == 0) {
             int max = Math.max(0, this.count - n);
             return new NEmptyBag(this.here, max, this.left, this.right);
@@ -143,7 +141,7 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public Bag removeAll(D elt) {
+    public Bag<D> removeAll(D elt) {
         if (this.here.compareTo(elt) == 0) {
             return left.union(right);
         } else if (elt.compareTo(this.here) > 0) {
@@ -153,12 +151,12 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public Bag union(Bag u) {
+    public Bag<D> union(Bag<D> u) {
         return left.union(right.union(u)).addN(here, this.getCount(here));
 
     }
 
-    public Bag inter(Bag u) {
+    public Bag<D> inter(Bag<D> u) {
         if (u.member(this.here)) {
             int min = Math.min(u.getCount(here), this.getCount(here));
             return new NEmptyBag(this.here, min , this.left.inter(u), this.right.inter(u));
@@ -167,30 +165,30 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         }
     }
 
-    public Bag diff(Bag u) {
+    public Bag<D> diff(Bag<D> u) {
          Bag rootless = u.removeN(here, this.getCount(here));
         return left.union(right).diff(rootless);
     }
 
-    public boolean equal(Bag u) {
+    public boolean equal(Bag<D> u) {
         return this.subset(u) && u.subset(this);
     }
 
-    public boolean subset(Bag u) {
+    public boolean subset(Bag<D> u) {
         return (this.getCount(here) <= u.getCount(here) && this.left.union(this.right).subset(u));
     }
     
     // Balancing 
     
-    public Bag blacken(){
-        return new NEmptyBag(this.here, this.count, black, this.left, this.right);
+    public Bag<D> blacken(){
+        return new NEmptyBag(this.here, this.count, false, this.left, this.right);
     }
   
-    public Bag balance(){ 
+    public Bag<D> balance(){ 
         return null;
     }
   
-    public Bag addInner(D elt, int n){
+    public Bag<D> addInner(D elt, int n){
         return null;
     }
     

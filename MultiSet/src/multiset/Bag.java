@@ -10,33 +10,35 @@ public interface Bag<D extends Comparable> extends Sequenced<D> {
 
     public int getCount(D elt);
 
-    public Bag add(D elt);
+    public Bag<D> add(D elt);
 
-    public Bag addN(D elt, int n);
+    public Bag<D> addN(D elt, int n);
 
-    public Bag remove(D elt);
+    public Bag<D> remove(D elt);
 
-    public Bag removeN(D elt, int n);
+    public Bag<D> removeN(D elt, int n);
 
-    public Bag removeAll(D elt);
+    public Bag<D> removeAll(D elt);
 
-    public Bag union(Bag u);
+    public Bag<D> union(Bag<D> u);
 
-    public Bag inter(Bag u);
+    public Bag<D> inter(Bag<D> u);
 
-    public Bag diff(Bag u);
+    public Bag<D> diff(Bag<D> u);
 
-    public boolean equal(Bag u);
+    public boolean equal(Bag<D> u);
 
-    public boolean subset(Bag u);
+    public boolean subset(Bag<D> u);
     
 // Balancing Methods
     
-    public Bag blacken();
+    public Bag<D> blacken();
 
-    public Bag balance();
+//    public Bag balance();
 
-    public Bag addInner(D elt, int n);
+    public Bag<D> addInner(D elt, int n);
+    
+    public Bag<D> rbInsert(D elt, int n);
     
 // Sequencing Methods
 
