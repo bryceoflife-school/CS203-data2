@@ -1,6 +1,7 @@
 package multiset;
 
 public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
+    
     boolean isRed;
     
     public void EmptyBag(){ 
@@ -83,7 +84,7 @@ public class EmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
 //    }
   
     public Bag<D> addInner(D elt, int n){
-        return new EmptyBag();
+        return new NEmptyBag(elt, n);
     }
     
     public Bag<D> rbInsert(D elt, int n) {

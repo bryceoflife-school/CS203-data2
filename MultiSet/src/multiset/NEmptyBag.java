@@ -213,7 +213,10 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
         NEmptyBag rightOfRight;
 
         // Case 1
-        if ((!this.isRedHuh() && (this.left instanceof NEmptyBag) && ((NEmptyBag) this.left).isRedHuh()
+        if ((!this.isRedHuh() 
+                && (this.left instanceof NEmptyBag) 
+                && (((NEmptyBag) this.left).left instanceof NEmptyBag)
+                && ((NEmptyBag) this.left).isRedHuh()
                 && ((NEmptyBag) this.left).left.isRedHuh())) {
 
             left = ((NEmptyBag) this.left);
@@ -227,7 +230,10 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
                     new NEmptyBag(this.here, this.count, false, leftOfLeft.right, this.right));
             
         // Case 2    
-        } else if ((!this.isRedHuh() && (this.left instanceof NEmptyBag) && ((NEmptyBag) this.left).isRedHuh()
+        } else if ((!this.isRedHuh() 
+                && (this.left instanceof NEmptyBag) 
+                && (((NEmptyBag) this.left).right instanceof NEmptyBag)
+                && ((NEmptyBag) this.left).isRedHuh()
                 && ((NEmptyBag) this.left).right.isRedHuh())) {
             
             left = ((NEmptyBag) this.left);
@@ -241,7 +247,10 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
                     new NEmptyBag(left.here, left.count, false, leftOfLeft, leftOfRight.left),
                     new NEmptyBag(this.here, this.count, false, leftOfRight.right, this.right));
         // Case 3    
-        } else if ((!this.isRedHuh() && (this.right instanceof NEmptyBag) && ((NEmptyBag) this.right).isRedHuh()
+        } else if ((!this.isRedHuh() 
+                && (this.right instanceof NEmptyBag) 
+                && (((NEmptyBag) this.right).left instanceof NEmptyBag)
+                && ((NEmptyBag) this.right).isRedHuh()
                 && ((NEmptyBag) this.right).left.isRedHuh())) {
             
             right = ((NEmptyBag) this.right);
@@ -254,7 +263,10 @@ public class NEmptyBag<D extends Comparable> implements Bag<D>, Sequenced<D> {
                     new NEmptyBag(this.here, this.count, false, this.left, rightOfLeft.left),
                     new NEmptyBag(right.here, right.count, false, rightOfLeft.right, right.right));
         // Case 4    
-        } else if ((!this.isRedHuh() && (this.right instanceof NEmptyBag) && ((NEmptyBag) this.right).isRedHuh()
+        } else if ((!this.isRedHuh() 
+                && (this.right instanceof NEmptyBag) 
+                && (((NEmptyBag) this.right).right instanceof NEmptyBag)
+                && ((NEmptyBag) this.right).isRedHuh()
                 && ((NEmptyBag) this.right).right.isRedHuh())) {
             
             right = ((NEmptyBag) this.right);
