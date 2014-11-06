@@ -10,7 +10,7 @@ public interface Bag<D extends Comparable> extends Sequenced<D> {
 
     /**
      * This method returns the size of the multi-set (Bag) / 
-     * Example: {A, B, C}.cardinality() = 4.
+     * Example: {A, B, C}.cardinality() = 3.
      * @return An integer representing the number of elements in the multi-set (Bag)
      * 
      */
@@ -99,7 +99,7 @@ public interface Bag<D extends Comparable> extends Sequenced<D> {
     public Bag<D> inter(Bag<D> u);
 
     /**
-     * Example: {A, B, C}.diff({C, E, F}) = {A, B, E, F}.
+     * Example: {A, B, C}.diff({C, E, F}) = {A, B}.
      * A method that returns the difference of two multi-sets (Bags)
      * @param u A Bag
      * @return A Bag
